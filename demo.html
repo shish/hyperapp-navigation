@@ -46,7 +46,10 @@ const FourOhFour = (state) => (
     ])
 );
 
-// Map URLs to pages
+// This 1:1 mapping of paths to pages is a super-simple approach, where our
+// onUrlChange handler simply sets state.url to the url. You could do more
+// complicated pattern matching and variable extraction in onUrlChange, but
+// this is just a demo.
 const routes = {
     "/": Root,
     "/settings": Settings,
