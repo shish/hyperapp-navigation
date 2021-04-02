@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Navigation Demo</title>
+		<meta name="viewport" content="width=device-width">
+		<script type="module">
+import { h, text, app } from "https://unpkg.com/hyperapp";
+import { onUrlChange, onUrlRequest, pushUrl } from "./src/index.js";
+
+// Define the different pages for our app
+const NavBar = () => (
+	h("ul", {}, [
+		h("li", {}, h("a", {href: "/"}, text("Home"))),
+		h("li", {}, h("a", {href: "/settings"}, text("Settings"))),
+		h("li", {}, h("a", {href: "/about"}, text("About"))),
+		h("li", {}, h("a", {href: "https://shish.io"}, text("External links are still external"))),
+	])
+);
+
+const Root = (state) => (
+	h("main", {}, [
+		h("h1", {}, text("Welcome to The Thing!")),
+		NavBar(),
+	])
+);
+
+const Settings = (state) => (
+	h("main", {}, [
+		h("h1", {}, text("Set some things for The Thing!")),
+		NavBar(),
+	])
+);
+
+const About = (state) => (
+	h("main", {}, [
+		h("h1", {}, text("About The Thing")),
+		NavBar(),
+	])
+);
+
+const FourOhFour = (state) => (
+	h("main", {}, [
+		h("h1", {}, text(`This is the default page, because there is no handler for "${state.url.pathname}"`)),
+		NavBar(),
+	])
+);
+
+// Map URLs to pages
+const routes = {
+    "/": Root,
+    "/settings": Settings,
+    "/about": About,
+    "404": FourOhFour,
+};
+
+// Create the app()
+app({
+    init: {
+		url: window.location
+	},
+    view: (state) => (routes[state.url.pathname] ?? routes["404"])(state),
+    subscriptions: state => [
+        onUrlChange((state, url) => ({ ...state, url: url })),
+        onUrlRequest((state, location) => [state, pushUrl(location.pathname)]),
+    ],
+	node: document.getElementById("app"),
+});
+		</script>
+	</head>
+	<body>
+		<noscript>This page requires JavaScript</noscript>
+		<main id="app"></main>
+	</body>
+</html>
