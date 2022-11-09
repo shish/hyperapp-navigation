@@ -11,8 +11,8 @@ const exitWithError = error => {
 /* eslint-enable no-undef */
 
 const gitBranchName = exec("git rev-parse --abbrev-ref HEAD")
-if (gitBranchName !== "master") {
-  exitWithError("please checkout the master branch to make a release!")
+if (gitBranchName !== "main") {
+  exitWithError("please checkout the main branch to make a release!")
 }
 
 const workingCopyChanges = exec("git status --porcelain")

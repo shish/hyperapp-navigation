@@ -1,38 +1,44 @@
 {
   "name": "@shish2k/hyperapp-navigation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A polished version of the abandoned @hyperapp/navigation",
   "keywords": [
     "hyperapp",
     "navigation"
   ],
-  "main": "dist/hyperappNavigation.js",
-  "module": "src/index.js",
+  "author": "Shish <shish+npm@shishnet.org>",
+  "license": "MIT",
+  "repository": "shish/hyperapp-navigation",
+  "homepage": "https://github.com/shish/hyperapp-navigation",
+  "bugs": {
+    "url": "https://github.com/shish/hyperapp-navigation/issues"
+  },
+  "source": "src/index.ts",
+  "main": "dist/index.js",
+  "module": "dist/module.js",
+  "types": "dist/types.d.ts",
   "peerDependencies": {
-    "hyperapp": "^2.0.0"
+    "hyperapp": "^2.0.22"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.12.11",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^5.16.0",
-    "eslint-plugin-compat": "^3.9.0",
-    "jest": "^24.9.0",
-    "jsdom": "^14.1.0",
-    "prettier": "^1.19.1",
-    "rollup": "^1.32.1",
-    "uglify-es": "^3.3.9"
+    "@babel/preset-env": "^7.20.2",
+    "@parcel/packager-ts": "^2.7.0",
+    "@parcel/transformer-typescript-types": "^2.7.0",
+    "@types/jest": "^29.2.2",
+    "jest": "^29.3.0",
+    "jest-environment-jsdom": "^29.3.1",
+    "jest-mock-fetch": "^2.0.5",
+    "parcel": "^2.7.0",
+    "prettier": "^2.7.1",
+    "ts-jest": "^29.0.3",
+    "typescript": "4.7"
   },
   "scripts": {
-    "clean": "npx rimraf coverage dist node_modules",
-    "format": "prettier --write '{src,test}/**/*.js'",
-    "format:check": "prettier --list-different {src,test}/**/*.js",
-    "lint": "eslint {src,test}/**/*.js",
+    "clean": "npx rimraf coverage dist node_modules .parcel-cache",
+    "format": "prettier --write '{src,test}/**/*.{js,ts}'",
     "test": "jest --coverage --no-cache",
-    "bundle": "rollup -i src/index.js -o dist/hyperappNavigation.js -m -f umd -n hyperappNavigation",
-    "minify": "uglifyjs dist/hyperappNavigation.js -o dist/hyperappNavigation.js -mc pure_funcs=['Object.defineProperty'] --source-map includeSources,url=hyperappNavigation.js.map",
-    "check": "npm run format:check && npm run lint && npm t",
-    "build": "npm run check && npm run bundle && npm run minify",
-    "prepare": "npm run build",
+    "build": "parcel build",
+    "prepare": "npm run format && npm test && npm run build",
     "release": "./pre-flight-tests && npm run clean && npm i && ./pre-flight-tests && git tag $npm_package_version && git push && git push --tags && npm publish --tag latest --access public"
   },
   "prettier": {
@@ -43,38 +49,12 @@
       "@babel/env"
     ]
   },
-  "eslintConfig": {
-    "extends": "eslint:recommended",
-    "plugins": [
-      "compat"
-    ],
-    "parser": "babel-eslint",
-    "parserOptions": {
-      "sourceType": "module"
-    },
-    "env": {
-      "browser": true
-    },
-    "rules": {
-      "no-use-before-define": "error",
-      "compat/compat": "error",
-      "no-unused-vars": "off",
-      "no-console": "off"
-    },
-    "settings": {
-      "polyfills": [
-        "URLSearchParams"
-      ]
+  "jest": {
+    "testEnvironment": "jsdom",
+    "automock": false,
+    "verbose": true,
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
     }
-  },
-  "browserslist": [
-    "defaults"
-  ],
-  "author": "Shish <shish+npm@shishnet.org>",
-  "license": "MIT",
-  "repository": "shish/hyperapp-navigation",
-  "homepage": "https://github.com/shish/hyperapp-navigation",
-  "bugs": {
-    "url": "https://github.com/shish/hyperapp-navigation/issues"
   }
 }
